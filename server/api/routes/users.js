@@ -1,19 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const bcrypt = require('bcrypt'); // password hashing
+const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
     User.find()
     .exec()
     .then(docs => {
         console.log(docs);
+        return res.status(201).json({ 
+            message: 'Users: table',
+            docs: docs
+        });
     })
     .catch(err => {
         console.log(err);
     })
+
 })
 
-router.post('/register', (req, res, netxt) => {
+router.post('/register', (req, res, next) => {
     User.find({email: req.body.email})
     .exec() // creates promise
     .then(user => {
@@ -61,14 +68,14 @@ router.post('/register', (req, res, netxt) => {
                     });
                     })
                     .catch(err => {
-                        res.status(500).json({error: err});
+                        res.status(500).json("On save");
                     });            
                 }
             });
         }
     })
     .catch(err => {
-        res.status(500).json({error:err});
+        res.status(500).json({error: err});
     })
 })
 
