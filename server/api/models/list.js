@@ -1,6 +1,7 @@
 // define model for user for mongoose
 
 const mongoose = require('mongoose');
+const Item = require('./item');
 
 //create layout of object
 const listSchema = mongoose.Schema({
@@ -8,7 +9,8 @@ const listSchema = mongoose.Schema({
     name: { type: String, required: true },
     createDate: { type: Date, default: Date.now },
     item_count: { type: Number},
-    current_total_cost: { type: Number}
+    current_total_cost: { type: Number},
+    items: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
 });
 
 // think of model like a provided constructor to build these objects (based on schema layout)

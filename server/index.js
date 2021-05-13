@@ -8,6 +8,7 @@ const http = require('http');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
 app.use((req, res, next) => {
     // set header to append access header to all responses
     res.header('Access-Control-Allow-Origin', '*');
@@ -30,6 +31,16 @@ process.on('warning', (warning) => {
     console.warn(warning.message); // Print the warning message
     console.warn(warning.stack);   // Print the stack trace
 });
+
+mongoose.connect(
+    'mongodb+srv://Staecode:' + 
+    process.env.MONGO_ATLAS_PW + 
+    '@cluster0.nmmfj.mongodb.net/yourwishlist?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true }
+);
+
+const userRoutes = require('./api/routes/users');
+app.use('/users', userRoutes);
 
 app.use((req, res, next)=> {
     // create error object
