@@ -17,7 +17,21 @@ router.get('/', (req, res, next) => {
     .catch(err => {
         console.log(err);
     })
+})
 
+router.get('/:userId', (req, res, next) => {
+    User.findById(req.params.userId) 
+    .exec()
+    .then(user => {
+        if(user) {
+            res.status(200).json({user});
+        } else {
+            res.status(404).json({message: 'No valid entry found for provided id'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    })
 })
 
 router.post('/register', (req, res, next) => {
@@ -77,6 +91,26 @@ router.post('/register', (req, res, next) => {
     .catch(err => {
         res.status(500).json({error: err});
     })
+})
+
+router.patch('/update/:userId', (req, res, next) => {
+    const id = req.params.userId;
+    const updateOps = {};
+    // build array of value pairs that need updating in database
+    // must make body request iterable for this to work
+    for (const key of Object.keys(req.body)) {
+        updateOps[key] = req.body[key];
+      }
+    User.updateOne({_id: id}, {$set: updateOps})
+    .exec()
+    .then(result => {
+        res.status(200).json(result);
+    })
+    .catch( err => {
+        res.status(500).json({
+            error: err
+        });
+    });
 })
 
 module.exports = router;

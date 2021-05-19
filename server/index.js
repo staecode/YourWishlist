@@ -41,6 +41,8 @@ mongoose.connect(
 
 const userRoutes = require('./api/routes/users');
 app.use('/users', userRoutes);
+const itemRoutes = require('./api/routes/items');
+app.use('/items', itemRoutes);
 
 app.use((req, res, next)=> {
     // create error object

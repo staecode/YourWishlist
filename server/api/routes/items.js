@@ -46,19 +46,18 @@ router.post('/add', (req, res, next) => {
                 console.log(result);
                 //201, successful, resource created
                 res.status(201).json({
-                    message: 'Item' + result.name + 'was created!',
+                    message: 'Item ' + result.name + ' was created!',
                     createdItem: {
                         name: result.name,
                         sourcelink: result.sourcelink,
-                      //  adddate: result.adddate,
+                        adddate: result.adddate,
                         price: result.price,
-                        description: result.description,
-                        
+                        description: result.description
                     }
                 });
             })
             .catch(err => {
-                res.status(500).json("On save");
+                res.status(500).json("On save " + err);
             });            
         }
         
@@ -70,20 +69,79 @@ router.post('/add', (req, res, next) => {
 
 
 router.get('/:itemId', (req, res, next) => {
+    Item.findById(req.params.itemId) //name seemed like the only unique variable to use 
+    .exec()
+    .then(item => {
+        if(item) {
+            res.status(200).json({item});
+        } else {
+            res.status(404).json({message: 'No valid entry found for provided id'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    })
+    // res.status(200).json({
+    //     message: 'You passed an ID',
+    //     retrievedItem: {
+    //         name: result.name,
+    //         sourcelink: result.sourcelink,
+    //         adddate: result.adddate,
+    //         price: result.price,
+    //         description: result.description 
+    //     }
+    //     //essentially you'd want to return the item searched for by id I am guessing? 
+    // }); 
+})
+
+router.patch('/update/:itemId', (req, res, next) => {
     const id = req.params.itemId;
-    res.status(200).json({
-        message: 'You passed an ID',
-        id: id
-        //essentially you'd want to return the item searched for by id I am guessing? 
-    }); 
+    const updateOps = {};
+    // build array of value pairs that need updating in database
+    // must make body request iterable for this to work
+    for (const key of Object.keys(req.body)) {
+        updateOps[key] = req.body[key];
+      }
+    Item.updateOne({_id: id}, {$set: updateOps})
+    .exec()
+    .then(result => {
+        res.status(200).json(result);
+    })
+    .catch( err => {
+        res.status(500).json({
+            error: err
+        });
+    });
 })
 
 router.delete('/:itemId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Deleted product',
-        id: id
-        //essentially you'd want to return the item searched for by id I am guessing? 
-    }); 
+    Item.findById(req.params.itemId) 
+    .exec()
+    .then(item => {
+        if(item) {
+            Item.remove({_id: req.params.itemId})
+            .exec()
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err
+                });
+            });
+        } else {
+            res.status(404).json({message: 'No valid entry found for provided id'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    })
+    
+    // res.status(200).json({
+    //     message: 'Deleted product',
+    //     id: id
+    //     //essentially you'd want to return the item searched for by id I am guessing? 
+    // }); 
 })
 
 
