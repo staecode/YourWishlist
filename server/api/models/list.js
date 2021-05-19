@@ -7,9 +7,10 @@ const Item = require('./item');
 const listSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId, //internal mongoose type
     name: { type: String, required: true },
+    description: { type: String, required: true },
     createDate: { type: Date, default: Date.now },
-    item_count: { type: Number},
-    current_total_cost: { type: Number},
+    item_count: { type: Number, default: 0},
+    current_total_cost: { type: Number, default: 0},
     items: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}]
 });
 

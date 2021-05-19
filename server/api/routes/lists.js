@@ -19,27 +19,46 @@ router.get('/', (req, res, next) => {
 
 })
 
-// /add, /update, /delete, /:itemId
+router.get('/:listId', (req, res, next) => {
+    List.findById(req.params.listId)
+    .populate('items') 
+    .then(list => {
+        if(list) {
+            res.status(200).json({list});
+        } else {
+            res.status(404).json({message: 'No valid entry found for provided id'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    })
+})
+
 router.post('/create', (req, res, next) => {
-    List.find({ name: req.body.name }) //name seemed like the only unique variable to use 
+    List.find({ name: req.body.name }) 
     .exec()
-    .then(item => {
-        if (item.length >= 1) {
+    .then(list => {
+        if (list.length >= 1) {
         //conflict 409 or unprocessable 
             return res.status(409).json({
                 message: 'List with this name is already in the database'
             });
         } else {
-            //did not include the bash-- encrypt function -- don't see a need 
             const list = new List({
-                //creates a unique id for the new item 
                 _id: new mongoose.Types.ObjectId(),
                 name: req.body.name,
-                item_count: req.body.item_count,
-               // adddate: req.body.adddate,
-                current_total_cost: req.body.price,
-               // description: req.body.description
-            }); 
+                description: req.body.description
+            })
+            //did not include the bash-- encrypt function -- don't see a need 
+            // const list = new List({
+            //     //creates a unique id for the new item 
+            //     _id: new mongoose.Types.ObjectId(),
+            //     name: req.body.name,
+            //     item_count: req.body.item_count,
+            //    // adddate: req.body.adddate,
+            //     current_total_cost: req.body.price,
+            //    // description: req.body.description
+            // }); 
             //save new item 
             list.save()
             .then(result => {
@@ -50,24 +69,21 @@ router.post('/create', (req, res, next) => {
                     createdItem: {
                         name: result.name,
                         item_count: result.item_count,
-                      //  adddate: result.adddate,
+                        adddate: result.adddate,
                         current_total_cost: result.current_total_cost,
-                      //  description: result.description,
-                        
+                        description: result.description,
+                        items: result.items
                     }
                 });
             })
             .catch(err => {
-                res.status(500).json("On save");
+                res.status(500).json("On save " + err);
             });            
         }
-        
     })
     .catch(err => {
         res.status(500).json({error: err});
     })
 })
-
-//router.get('/retrieve')
 
 module.exports = router;

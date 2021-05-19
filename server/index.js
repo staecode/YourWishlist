@@ -43,8 +43,10 @@ const userRoutes = require('./api/routes/users');
 app.use('/users', userRoutes);
 const itemRoutes = require('./api/routes/items');
 app.use('/items', itemRoutes);
+const listRoutes = require('./api/routes/lists');
+app.use('/lists', listRoutes);
 
-app.use((req, res, next)=> {
+app.use((req, res, next) => {
     // create error object
     const error = new Error('Not Found');
     error.status = 404;
