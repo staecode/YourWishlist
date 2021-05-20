@@ -13,3 +13,5 @@ const itemSchema = mongoose.Schema({
 // think of model like a provided constructor to build these objects (based on schema layout)
 // parms: internal name to refer to model, schema name to create new objects of model
 module.exports = mongoose.model('Item', itemSchema);
+
+// test
