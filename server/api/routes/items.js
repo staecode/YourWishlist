@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Item = require('../models/item');
 const mongoose = require('mongoose');
-const axious = require('axios');
+const axios = require('axios');
 const List = require('../models/list');
 
 router.get('/', (req, res, next) => {
@@ -52,7 +52,7 @@ router.post('/add', (req, res, next) => {
                     .then(added => {
                         res.status(201).json({
                             message: 'Item ' + result.name + ' was created!',
-                            createdRoom: {
+                            createdItem: {
                                 _id: result.id,
                                 name: result.name,
                                 description: result.description,
@@ -61,7 +61,7 @@ router.post('/add', (req, res, next) => {
                                 price: result.price
                             }
                         });
-                        List.updateOne({_id: doc._id}, {$inc: {item_count: 1}})
+                        
                     })
                     .catch(err_add => {
                         console.log(err_add);  

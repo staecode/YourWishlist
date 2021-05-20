@@ -1,11 +1,10 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); //object
 const List = require('../models/list');
 const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
     List.find()
-    .exec()
     .then(docs => {
         console.log(docs);
         return res.status(201).json({ 
@@ -19,24 +18,24 @@ router.get('/', (req, res, next) => {
 
 })
 
+//router is an express object
 router.get('/:listId', (req, res, next) => {
-    List.findById(req.params.listId)
-    .populate('items') 
-    .then(list => {
+    List.findById(req.params.listId) //findById is Mongoose
+    .populate('items') //mongoose
+    .then(list => { //then is a promise, comes from ES6 (node/javascript)
         if(list) {
-            res.status(200).json({list});
+            res.status(200).json({list}); //res.status express/javascript
         } else {
             res.status(404).json({message: 'No valid entry found for provided id'});
         }
     })
-    .catch(err => {
+    .catch(err => {// catch is a piece of the promise structure
         res.status(500).json({error: err});
     })
 })
 
 router.post('/create', (req, res, next) => {
     List.find({ name: req.body.name }) 
-    .exec()
     .then(list => {
         if (list.length >= 1) {
         //conflict 409 or unprocessable 
@@ -65,7 +64,7 @@ router.post('/create', (req, res, next) => {
                 console.log(result);
                 //201, successful, resource created
                 res.status(201).json({
-                    message: 'List' + result.name + 'was created!',
+                    message: 'List ' + result.name + ' was created!',
                     createdItem: {
                         name: result.name,
                         item_count: result.item_count,
@@ -85,5 +84,7 @@ router.post('/create', (req, res, next) => {
         res.status(500).json({error: err});
     })
 })
+
+
 
 module.exports = router;

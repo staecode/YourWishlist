@@ -6,7 +6,7 @@ const itemSchema = mongoose.Schema({
     name: { type: String, required: true },
     sourcelink: { type: String, required: true },
     addDate: { type: Date, default: Date.now },
-    price: { type: Number},
+    price: { type: Number, required: true},
     description: { type: String }
 });
 
