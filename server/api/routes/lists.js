@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router(); //object
 const List = require('../models/list');
 const mongoose = require('mongoose');
+const Item = require('../models/item');
 
 router.get('/', (req, res, next) => {
     List.find()
@@ -85,6 +86,29 @@ router.post('/create', (req, res, next) => {
     })
 })
 
-
-
+router.delete('/delete', (req, res, next) => {
+    const itemId = req.body.itemId;
+    Item.findById(req.body.itemId)
+        .then(user => {
+            if (user) {
+                List.deleteOne({ _id: user._id}, { $pull: { items: docs._id }, $inc: { current_total_cost: -docs.price, item_count: -1 }})
+                Item.remove({ _id: itemId })
+                    .then(result => {
+                        res.status(200).json({
+                            message: 'Item' + user.name + 'was deleted',
+                        });
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
+            } else {
+                res.status(404).json({ message: 'No valid entry' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: err }); 
+    })
+})
 module.exports = router;

@@ -142,13 +142,7 @@ router.delete('/:itemId', (req, res, next) => {
     })
     .catch(err => {
         res.status(500).json({error: err});
-    })
-    
-    // res.status(200).json({
-    //     message: 'Deleted product',
-    //     id: id
-    //     //essentially you'd want to return the item searched for by id I am guessing? 
-    // }); 
+    })   
 })
 
 
