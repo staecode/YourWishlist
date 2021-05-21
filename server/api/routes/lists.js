@@ -91,7 +91,7 @@ router.delete('/delete', (req, res, next) => {
     Item.findById(req.body.itemId)
         .then(user => {
             if (user) {
-                List.deleteOne({ _id: user._id}, { $pull: { items: docs._id }, $inc: { current_total_cost: -docs.price, item_count: -1 }})
+                List.updateOne({ _id: user._id}, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 }})
                 Item.remove({ _id: itemId })
                     .then(result => {
                         res.status(200).json({
