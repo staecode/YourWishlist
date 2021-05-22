@@ -121,35 +121,37 @@ router.delete('/deleteItem/:listId', (req, res, next) => {
     // - check if item exists in database
     // - if it doesn't, exit
     // - if it does, delete, return success message
-    const itemId = req.body.itemId;
-    Item.findById(itemId)
-        .then(user => {
-            if (user) {
-                List.updateOne({ _id: req.params.listId}, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 }})
-                .then(response => {
-                    Item.remove({ _id: itemId })
-                    .then(result => {
-                        res.status(200).json({
-                            message: 'Item ' + user.name + ' was deleted',
-                        });
+    List.findById(req.params.listId)
+        .then(list => {
+            if (!list) {
+                res.status(404).json({ message: 'No valid entry found for this id' });
+            }
+            else {
+                const itemId = req.body.itemId;
+                Item.findById(itemId)
+                    .then(user => {
+                        if (user) {
+                            List.updateOne({ _id: req.params.listId }, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 } })
+                                .then(response => {
+                                    Item.remove({ _id: itemId })
+                                        .then(result => {
+                                            res.status(200).json({ message: 'Item ' + user.name + ' was deleted', });
+                                        })
+                                        .catch(err => {
+                                            res.status(500).json({ error: err });
+                                        });
+                                })
+                                .catch(err => {
+                                    res.status(500).json({ message: 'List update not successful ' + err });
+                                });
+                        } else {
+                            res.status(404).json({ message: 'No valid entry of Item Id' });
+                        }
                     })
                     .catch(err => {
-                        res.status(500).json({
-                            error: err
-                        });
-                    });
-                })
-                .catch(err => {
-                    res.status(500).json({
-                        message: 'List update not successful ' + err
-                    });
-                });
-            } else {
-                res.status(404).json({ message: 'No valid entry' });
+                        res.status(500).json({ error: err });
+                    })
             }
         })
-        .catch(err => {
-            res.status(500).json({ error: err }); 
-    })
 })
 module.exports = router;

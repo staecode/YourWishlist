@@ -8,7 +8,6 @@ const http = require('http');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-//testing changes on the git
 app.use((req, res, next) => {
     // set header to append access header to all responses
     res.header('Access-Control-Allow-Origin', '*');
