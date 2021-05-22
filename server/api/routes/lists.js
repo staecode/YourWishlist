@@ -86,16 +86,51 @@ router.post('/create', (req, res, next) => {
     })
 })
 
-router.delete('/delete', (req, res, next) => {
+router.delete('/:listId', (req, res, next) => {
+    List.findById(req.params.listId) 
+    .exec()
+    .then(list => {
+        if(list) {
+            List.remove({_id: req.params.listId})
+            .exec()
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err
+                });
+            });
+        } else {
+            res.status(404).json({message: 'No valid entry found for provided id'});
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err});
+    })   
+})
+
+
+router.delete('/deleteItem/:listId', (req, res, next) => {
+    //works in current state, but we need to rearrange to the following logic flow:
+    // - check if list exists
+    // - if list does not exist, exit
+    // - if list exists, check to see if item is on list
+    // - if it isnt, exit
+    // - if item on list, update through pull/inc
+    // - check if item exists in database
+    // - if it doesn't, exit
+    // - if it does, delete, return success message
     const itemId = req.body.itemId;
-    Item.findById(req.body.itemId)
+    Item.findById(itemId)
         .then(user => {
             if (user) {
-                List.updateOne({ _id: user._id}, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 }})
-                Item.remove({ _id: itemId })
+                List.updateOne({ _id: req.params.listId}, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 }})
+                .then(response => {
+                    Item.remove({ _id: itemId })
                     .then(result => {
                         res.status(200).json({
-                            message: 'Item' + user.name + 'was deleted',
+                            message: 'Item ' + user.name + ' was deleted',
                         });
                     })
                     .catch(err => {
@@ -103,6 +138,12 @@ router.delete('/delete', (req, res, next) => {
                             error: err
                         });
                     });
+                })
+                .catch(err => {
+                    res.status(500).json({
+                        message: 'List update not successful ' + err
+                    });
+                });
             } else {
                 res.status(404).json({ message: 'No valid entry' });
             }
