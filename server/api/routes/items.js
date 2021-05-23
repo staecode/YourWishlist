@@ -4,6 +4,7 @@ const Item = require('../models/item');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const List = require('../models/list');
+const scraper = require('../middleware/scraper');
 
 router.get('/', (req, res, next) => {
     Item.find()
@@ -20,6 +21,15 @@ router.get('/', (req, res, next) => {
     })
 
 })
+
+router.post('/addItem', scraper, (req, res, next) => {
+    if(req.response) {
+        console.log(req.response);
+    } else {
+        console.log(req.error);
+    }
+})
+
 //test
 // /add, /update, /delete, /:itemId
 router.post('/add', (req, res, next) => {

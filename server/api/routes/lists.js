@@ -110,6 +110,23 @@ router.delete('/:listId', (req, res, next) => {
     })   
 })
 
+router.patch('/clearList/:listId', (req, res, next) => {
+    const listId = req.params.listId;
+    List.findById(listId)
+    .then(list => {
+        if(list) {
+            List.updateOne({_id: listId}, {$set: {items: [], current_total_cost: 0, item_count:0}})
+            .then(result => {
+                res.status(200).json({message: 'List cleared of items'});
+            })
+            .catch(err => {
+                res.status(500).json({error: "Error clearing list"});
+            })
+        } else {
+            res.status(404).json({message: 'No valid entry found for this List Id'});
+        }
+    })
+})
 
 router.delete('/deleteItem/:listId', (req, res, next) => {
     //works in current state, but we need to rearrange to the following logic flow:
@@ -122,36 +139,41 @@ router.delete('/deleteItem/:listId', (req, res, next) => {
     // - if it doesn't, exit
     // - if it does, delete, return success message
     List.findById(req.params.listId)
-        .then(list => {
-            if (!list) {
-                res.status(404).json({ message: 'No valid entry found for this id' });
-            }
-            else {
-                const itemId = req.body.itemId;
-                Item.findById(itemId)
-                    .then(user => {
-                        if (user) {
-                            List.updateOne({ _id: req.params.listId }, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 } })
-                                .then(response => {
-                                    Item.remove({ _id: itemId })
-                                        .then(result => {
-                                            res.status(200).json({ message: 'Item ' + user.name + ' was deleted', });
-                                        })
-                                        .catch(err => {
-                                            res.status(500).json({ error: err });
-                                        });
-                                })
-                                .catch(err => {
-                                    res.status(500).json({ message: 'List update not successful ' + err });
-                                });
-                        } else {
-                            res.status(404).json({ message: 'No valid entry of Item Id' });
-                        }
-                    })
+    .then(list => {
+        if (!list) {
+            res.status(404).json({ message: 'No valid entry found for this List Id' });
+        }
+        else {
+            const itemId = req.body.itemId;
+            console.log(itemId);
+            Item.findById(itemId)
+            .then(user => {
+                if (user) {
+                    console.log(user);
+                    List.updateOne({ _id: req.params.listId }, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 } })
+                    .then(response => {
+                        Item.remove({ _id: itemId })
+                            .then(result => {
+                                res.status(200).json({ message: 'Item ' + user.name + ' was deleted', });
+                            })
+                            .catch(err => {
+                                res.status(500).json({ error: err });
+                            });
+                        })
                     .catch(err => {
-                        res.status(500).json({ error: err });
-                    })
+                        res.status(500).json({ message: 'List update not successful ' + err });
+                    });
+                } else {
+                    res.status(404).json({ message: 'No valid entry of Item Id' });
+                }
+            })
+            .catch(err => {
+                res.status(500).json({ error: err });
+            })
             }
-        })
+    })
+    .catch(err => {
+        res.status(500).json({ error: err });
+    })
 })
 module.exports = router;
