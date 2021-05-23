@@ -110,6 +110,44 @@ router.delete('/:listId', (req, res, next) => {
     })   
 })
 
+router.patch('/setTotal/:listId', (req, res, next) => {
+    const listId = req.params.listId;
+    const total = req.body.total;
+    List.findById(listId)
+    .then(list => {
+        if(list) {
+            List.updateOne({_id: listId}, {$set: {current_total_cost: total}})
+            .then(result => { 
+                res.status(200).json({message: 'List price set to ' + req.body.total});
+            })
+            .catch(err => {
+                res.status(500).json({error: "Error setting list price"});
+            })
+        } else {
+            res.status(404).json({message: 'No valid entry found for this List Id'});
+        }
+    })
+})
+
+router.patch('/setCount/:listId', (req, res, next) => {
+    const listId = req.params.listId;
+    const count = req.body.count;
+    List.findById(listId)
+    .then(list => {
+        if(list) {
+            List.updateOne({_id: listId}, {$set: {item_count: count}})
+            .then(result => { 
+                res.status(200).json({message: 'List count set to ' + req.body.count});
+            })
+            .catch(err => {
+                res.status(500).json({error: "Error setting list count"});
+            })
+        } else {
+            res.status(404).json({message: 'No valid entry found for this List Id'});
+        }
+    })
+})
+
 router.patch('/clearList/:listId', (req, res, next) => {
     const listId = req.params.listId;
     List.findById(listId)
@@ -127,6 +165,8 @@ router.patch('/clearList/:listId', (req, res, next) => {
         }
     })
 })
+
+
 
 router.delete('/deleteItem/:listId', (req, res, next) => {
     //works in current state, but we need to rearrange to the following logic flow:
