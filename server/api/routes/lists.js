@@ -49,17 +49,6 @@ router.post('/create', (req, res, next) => {
                 name: req.body.name,
                 description: req.body.description
             })
-            //did not include the bash-- encrypt function -- don't see a need 
-            // const list = new List({
-            //     //creates a unique id for the new item 
-            //     _id: new mongoose.Types.ObjectId(),
-            //     name: req.body.name,
-            //     item_count: req.body.item_count,
-            //    // adddate: req.body.adddate,
-            //     current_total_cost: req.body.price,
-            //    // description: req.body.description
-            // }); 
-            //save new item 
             list.save()
             .then(result => {
                 console.log(result);

@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt'); // password hashing
 const mongoose = require('mongoose');
+const { route } = require('./lists');
 
 router.get('/', (req, res, next) => {
     User.find()
@@ -32,6 +33,63 @@ router.get('/:userId', (req, res, next) => {
     .catch(err => {
         res.status(500).json({error: err});
     })
+})
+
+router.post('/login', (req, res, next) => {
+    User.find({handle: req.body.email}) 
+    .exec()
+    .then(user => { // empty or one user 'array'
+        if(user.length < 1) {
+            return res.status(401).json({
+                message: 'Authentication Failed'
+            });
+        }
+        // compare coming in plain text to stored
+        // have to use bcrypt compare because it knows the algorithm
+        // for hashing
+        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+            if(err) {
+                return res.status(401).json({
+                    message: 'Authentication Failed'
+                });
+            } 
+            if(result) {
+                //build element of my json web token
+                const token = jwt.sign(
+                    {
+                        email: user[0].email,
+                        userId: user[0]._id
+                    }, 
+                    "" + process.env.JWT_KEY, 
+                    {
+                        expiresIn: "1h"
+                    }
+                );
+                return res.status(200).json({
+                    message: 'Authentication Successful',
+                    token: token,
+                    user: {
+                        email: user[0].email,
+                        _id: user[0]._id
+                    }
+                });
+            }
+            // same error message occurs at all levels so as not to 
+            // tell user attempting to log in more information than 
+            // necessary about credentials, in case it is malicious
+            // (password incorrect lets them know they have a 
+            // successful username)
+            return res.status(401).json({
+                message: 'Authentication Failed'
+            });
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
 })
 
 router.post('/register', (req, res, next) => {
