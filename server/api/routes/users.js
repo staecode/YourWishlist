@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt'); // password hashing
 const mongoose = require('mongoose');
-const { route } = require('./lists');
 
 router.get('/', (req, res, next) => {
     User.find()
