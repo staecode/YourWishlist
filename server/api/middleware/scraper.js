@@ -1,28 +1,22 @@
-// request Axios
 const axios = require('axios');
-const querystring = require('querystring');
+const url = require('url');
 
 module.exports = (req, res, next) => {
 
-    const url = encodeURIComponent(req.body.url);
-    const scrape_link = 'https://app.scrapingbee.com/api/v1';
-    const api_key = 'SHMK5K4CFH1P5OYW5O53WA3S74JLM8TCK2N3UVDPFRZKXL5Z96SJ9B90XIUZ8H8PR2WWU150MVI4KQ4U';
+    const query = url.parse(req.body.url,true).query;
+    const sku = query.skuId;
+    
+    const scrape_link = `https://api.bestbuy.com/v1/products/${sku}.json?show=sku,name,salePrice,longDescription,images&apiKey=${process.env.BEST_BUY_KEY}`;
  
     (async () => {
         try {
-            const response = await axios.get(`${scrape_link}`, {
-                params: {
-                    'api_key': api_key,
-                    'url': url
-                }
-            })
-            console.log(response);
-            req.product = response;
+            const response = await axios.get(`${scrape_link}`);
+            console.log(response.data);
             next();
         }
         catch (error) {
-            req.error = error;
+            console.log(error.response.body);
             next();
         }
-    })
+    })();
  }

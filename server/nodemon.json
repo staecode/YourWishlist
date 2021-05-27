@@ -1,6 +1,7 @@
 {
     "env": {
         "MONGO_ATLAS_PW": "pw9idNFZNMqeEyjP",
-        "JWT_KEY": "0252666__SHSH"
+        "JWT_KEY": "0252666__SHSH",
+        "BEST_BUY_KEY": "PVZYTXSrfGehHxrPDkm2wzVo"
     }
 }

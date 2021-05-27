@@ -3,6 +3,7 @@ const router = express.Router(); //object
 const List = require('../models/list');
 const mongoose = require('mongoose');
 const Item = require('../models/item');
+const scraper = require('../middleware/scraper');
 
 router.get('/', (req, res, next) => {
     List.find()
@@ -155,7 +156,9 @@ router.patch('/clearList/:listId', (req, res, next) => {
     })
 })
 
-
+router.post('/addItem', scraper, (req, res, next) => {
+    res.status(200).json({message: 'At add item'});
+})
 
 router.delete('/deleteItem/:listId', (req, res, next) => {
     //works in current state, but we need to rearrange to the following logic flow:
