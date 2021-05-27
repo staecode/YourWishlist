@@ -12,6 +12,13 @@ module.exports = (req, res, next) => {
         try {
             const response = await axios.get(`${scrape_link}`);
             console.log(response.data);
+            const item = {
+                "name": response.data.name,
+                "price": response.data.salePrice,
+                "description": response.data.longDescription,
+                "imagehref": response.data.images[0].href
+            };
+            req.item = item;
             next();
         }
         catch (error) {

@@ -157,7 +157,57 @@ router.patch('/clearList/:listId', (req, res, next) => {
 })
 
 router.post('/addItem', scraper, (req, res, next) => {
-    res.status(200).json({message: 'At add item'});
+    const listId = req.body.listId;
+    List.findById(listId)
+        .then(list => {
+        if(!list) {
+            return res.status(404).json({
+                message: "List not found"
+            });
+        } else {
+            const item = new Item({
+                _id: new mongoose.Types.ObjectId(),
+                name: req.item.name,
+                sourcelink: req.body.url,
+                price: req.item.price,
+                description: req.item.description,
+                img: req.item.imagehref
+            })
+            return item.save();
+        }
+    })
+    .then(result => {
+        List.findById(listId)
+            .exec()
+            .then(doc => {
+                if(doc) {
+                    List.updateOne({_id: doc._id}, {$push: {items: result._id}, $inc: {current_total_cost: result.price, item_count: 1}})
+                    .exec()
+                    .then(added => {
+                        res.status(201).json({
+                            message: 'Item ' + result.name + ' was created!',
+                            createdItem: {
+                                _id: result.id,
+                                name: result.name,
+                                description: result.description,
+                                sourcelink: result.sourcelink,
+                                price: result.price,
+                                img: result.img
+                            }
+                        });
+                        
+                    })
+                    .catch(err_add => {
+                        console.log(err_add);  
+                    })
+                }
+            })
+    })     
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
+    });
+    
 })
 
 router.delete('/deleteItem/:listId', (req, res, next) => {

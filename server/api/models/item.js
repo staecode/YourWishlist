@@ -7,7 +7,8 @@ const itemSchema = mongoose.Schema({
     sourcelink: { type: String, required: true },
     addDate: { type: Date, default: Date.now },
     price: { type: Number, required: true},
-    description: { type: String }
+    description: { type: String },
+    img: {type: String}
 });
 
 // think of model like a provided constructor to build these objects (based on schema layout)
