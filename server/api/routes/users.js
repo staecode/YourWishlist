@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt'); // password hashing
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 router.get('/', (req, res, next) => {
     User.find()
@@ -25,6 +26,7 @@ router.get('/:userId', (req, res, next) => {
     .then(user => {
         if(user) {
             res.status(200).json({user});
+            
         } else {
             res.status(404).json({message: 'No valid entry found for provided id'});
         }
@@ -35,12 +37,12 @@ router.get('/:userId', (req, res, next) => {
 })
 
 router.post('/login', (req, res, next) => {
-    User.find({handle: req.body.email}) 
+    User.find({email: req.body.email}) 
     .exec()
     .then(user => { // empty or one user 'array'
         if(user.length < 1) {
             return res.status(401).json({
-                message: 'Authentication Failed'
+                message: 'Authentication Failed on find'
             });
         }
         // compare coming in plain text to stored
@@ -49,7 +51,7 @@ router.post('/login', (req, res, next) => {
         bcrypt.compare(req.body.password, user[0].password, (err, result) => {
             if(err) {
                 return res.status(401).json({
-                    message: 'Authentication Failed'
+                    message: 'Authentication Failed on password'
                 });
             } 
             if(result) {
