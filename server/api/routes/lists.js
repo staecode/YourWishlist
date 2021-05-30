@@ -3,6 +3,7 @@ const router = express.Router(); //object
 const List = require('../models/list');
 const mongoose = require('mongoose');
 const Item = require('../models/item');
+const User = require('../models/user');
 const scraper = require('../middleware/scraper');
 
 router.get('/', (req, res, next) => {
@@ -37,12 +38,12 @@ router.get('/:listId', (req, res, next) => {
 })
 
 router.post('/create', (req, res, next) => {
-    List.find({ name: req.body.name }) 
-    .then(list => {
-        if (list.length >= 1) {
-        //conflict 409 or unprocessable 
-            return res.status(409).json({
-                message: 'List with this name is already in the database'
+    const userId = req.body.userId;
+    User.findById(userId)
+    .then(user => {
+        if(!user) {
+            return res.status(404).json({
+                message: "User not found"
             });
         } else {
             const list = new List({
@@ -50,54 +51,72 @@ router.post('/create', (req, res, next) => {
                 name: req.body.name,
                 description: req.body.description
             })
-            list.save()
-            .then(result => {
-                console.log(result);
-                //201, successful, resource created
-                res.status(201).json({
-                    message: 'List ' + result.name + ' was created!',
-                    createdItem: {
-                        name: result.name,
-                        item_count: result.item_count,
-                        adddate: result.adddate,
-                        current_total_cost: result.current_total_cost,
-                        description: result.description,
-                        items: result.items
-                    }
-                });
-            })
-            .catch(err => {
-                res.status(500).json("On save " + err);
-            });            
+            return list.save()
         }
     })
+    .then(result => {
+        User.findById(userId)
+            .exec()
+            .then(user => {
+                if(user) {
+                    User.updateOne({_id: user._id}, {$push: {lists: result._id}})
+                    .exec()
+                    .then(added => {
+                        res.status(201).json({
+                            message: 'List ' + result.name + ' was created!',
+                            createdList: {
+                                _id: result.id,
+                                name: result.name,
+                                description: result.description
+                            }
+                        });
+                        
+                    })
+                    .catch(err_add => {
+                        console.log(err_add);  
+                    })
+                }
+            })
+    })     
     .catch(err => {
+        console.log(err);
         res.status(500).json({error: err});
-    })
+    });
 })
 
 router.delete('/:listId', (req, res, next) => {
-    List.findById(req.params.listId) 
-    .exec()
-    .then(list => {
-        if(list) {
-            List.remove({_id: req.params.listId})
-            .exec()
-            .then(result => {
-                res.status(200).json(result);
+    const userId = req.body.userId;
+    User.findById(userId)
+    .then(user => {
+        if(!user) {
+            res.status(404).json({ message: 'No valid entry found for this User Id' });
+        } else {
+            const listId = req.params.listId;
+            List.findById(listId)
+            .then(list => {
+                if(list) {
+                    User.updateOne({ _id: user._id }, { $pull: { lists: list._id }})
+                    .then(response => {
+                        List.remove({_id: listId})
+                        .then(result => {
+                            res.status(200).json({ message: 'List ' + list.name + ' was deleted', });
+                        })
+                        .catch(err => {
+                            res.status(500).json({ error: err });
+                        });
+                    })
+                } else {
+                    res.status(404).json({ message: 'No valid entry of List Id' });
+                }
             })
             .catch(err => {
-                res.status(500).json({
-                    error: err
-                });
-            });
-        } else {
-            res.status(404).json({message: 'No valid entry found for provided id'});
+                res.status(500).json({ error: "Found user, then: " + err });
+            })
         }
     })
     .catch(err => {
-        res.status(500).json({error: err});
-    })   
+        res.status(500).json({ error: "Did not find user: " + err });
+    }) 
 })
 
 router.patch('/setTotal/:listId', (req, res, next) => {
@@ -230,16 +249,14 @@ router.delete('/deleteItem/:listId', (req, res, next) => {
         }
         else {
             const itemId = req.body.itemId;
-            console.log(itemId);
             Item.findById(itemId)
-            .then(user => {
-                if (user) {
-                    console.log(user);
-                    List.updateOne({ _id: req.params.listId }, { $pull: { items: user._id }, $inc: { current_total_cost: -user.price, item_count: -1 } })
+            .then(item => {
+                if (item) {
+                    List.updateOne({ _id: req.params.listId }, { $pull: { items: item._id }, $inc: { current_total_cost: -user.price, item_count: -1 } })
                     .then(response => {
                         Item.remove({ _id: itemId })
                             .then(result => {
-                                res.status(200).json({ message: 'Item ' + user.name + ' was deleted', });
+                                res.status(200).json({ message: 'Item ' + item.name + ' was deleted', });
                             })
                             .catch(err => {
                                 res.status(500).json({ error: err });
