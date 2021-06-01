@@ -17,6 +17,37 @@ router.get('/login', function(req, res) {
   res.render('login', { error: false }); 
 });
 
+router.post('/login', function (req, res, next) {
+/*  const username = req.body.username;
+  let loginResult = login(username, req.body.password);
+  
+  if (loginResult) {
+    res.render('layout', { username: username });
+  }
+  else {
+    res.render('index', { error: true });
+  }
+*/
+  (async () => {
+    try {
+      let logincycle = 'http://localhost:5000/users/login';
+      const response = await axios({
+        method: 'POST',
+        url: `${logincycle}`,
+        data: {
+          email: req.body.email,
+          password: req.body.password
+        }
+      });
+      if (response) {
+        res.render('layout', { title: 'Welcome User', messaage: 'Logged in successfully' });
+      }
+    } catch (error) {
+      res.render('login', {message: 'Failed to log in' + error})
+    }
+  })
+});
+
 //GET register page
 router.get('/register', function (req, res) {
   res.render('register', { error: false })
@@ -67,6 +98,7 @@ router.post('/createList/:userId', function(req, res) {
           res.render('createList', {title: 'Your Wishlist', heading: 'Create New List', userId: req.body.userId, message: response.data.message});
         } 
       } catch (error) {
+
         res.render('createList', {title: 'Your Wishlist', heading: 'Create New List', userId: req.body.userId, message: error + '. Error creating list. Please try again.'});
       }
     })();
