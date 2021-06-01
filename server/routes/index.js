@@ -4,8 +4,15 @@ const { body,validationResult } = require('express-validator');
 
 // GET home page.
 router.get('/', function(req, res) {
-  res.redirect('/userLists');
+ // res.redirect('/userLists');
+  res.render('login', { error: false }); 
 });
+
+//GET register page
+router.get('/register', function (req, res) {
+  res.render('register', { error: false })
+}); 
+
 
 const axios = require('axios');
 const { listIndexes } = require('../api/models/item');
