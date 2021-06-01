@@ -27,13 +27,31 @@ router.get('/:listId', (req, res, next) => {
     .populate('items') //mongoose
     .then(list => { //then is a promise, comes from ES6 (node/javascript)
         if(list) {
-            res.status(200).json({list}); //res.status express/javascript
+            res.status(200).json({
+                list_name: list.name,
+                description: list.description,
+                current_total_cost: list.current_total_cost,
+                items: list.items.map(item => {
+                    return {
+                        item: {
+                            name: item.name,
+                            price: item.price,
+                            img: item.img,
+                            request: {
+                                type: 'GET',
+                                description: 'link to item page',
+                                url: 'http://localhost:3000/items/' + item._id
+                            }
+                        }
+                    }
+                })
+            })
         } else {
             res.status(404).json({message: 'No valid entry found for provided id'});
         }
     })
     .catch(err => {// catch is a piece of the promise structure
-        res.status(500).json({error: err});
+        res.status(500).json({error: 'in error ' + err});
     })
 })
 
@@ -192,6 +210,7 @@ router.post('/addItem', scraper, (req, res, next) => {
                     price: req.item.price,
                     description: req.item.description,
                     img: req.item.imagehref
+
                 })
                 return item.save();
             }
@@ -212,7 +231,12 @@ router.post('/addItem', scraper, (req, res, next) => {
                                     description: result.description,
                                     sourcelink: result.sourcelink,
                                     price: result.price,
-                                    img: result.img
+                                    img: result.img.userId,                        
+                                    request: {
+                                        type: 'GET',
+                                        description: 'link to list page',
+                                        url: 'http://localhost:3000/items/' + result._id
+                                    }
                                 }
                             });
                             

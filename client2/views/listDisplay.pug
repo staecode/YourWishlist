@@ -1,0 +1,20 @@
+extends layout 
+
+block content 
+    h1(class='heading')= results.list_name
+    <br />
+    ul#results: each item in results.items
+        li 
+            div(class='row')
+                div(class='col-md-3 itemResultImg')
+                    img(src=item.item.img alt='item image' style='width:5vw;height:5vw;')
+                div(class='col-md-6  itemResultDesc')
+                    a(class='itemListing' href=item.item.request.url) #{item.item.name + ':   '}
+                    p(class='itemPrice') #{'Cost: $' + item.item.price}
+
+        li  
+          hr
+    h3(class='current_total_cost') Current Total Cost: <span class='current_cost'>$#{results.current_total_cost}</span>
+    if message 
+            p=message
+    

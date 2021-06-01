@@ -188,7 +188,7 @@ router.get('/userLists/:userId', (req, res, next) => {
                         request: {
                             type: 'GET',
                             description: 'link to list page',
-                            url: 'http://localhost:3000/lists/' + list
+                            url: 'http://localhost:3000/lists/' + list._id
                         }
                     }
                 }

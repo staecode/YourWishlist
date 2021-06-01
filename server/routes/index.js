@@ -58,14 +58,21 @@ router.post('/createList/:userId', function(req, res) {
 })
   
 
-router.get('/lists/:listId/:userId', (req, res) => {
-  const userId = req.params.userId;
+router.get('/lists/:listId', (req, res) => {
   const listId = req.params.listId;
-   try {
-    let getList = 'http://localhost:5000/lists/' + listIndexes;
-  } catch (error) {
-      res.render('userList/' + userId, {title: 'Your WishLists', message: error + '. Error oprening list. Please try again.'});
+
+  (async () => {
+    try {
+      let getList = 'http://localhost:5000/lists/' + listId;
+      const response = await axios.get(`${getList}`);
+      if(response) {
+        res.render('listDisplay', {results: response.data})
+      } 
+    } catch (error) {
+      console.log(error)
     }
+  })();
+
 })
 
 module.exports = router;
