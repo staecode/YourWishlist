@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
 });
 
 const axios = require('axios');
+const { listIndexes } = require('../api/models/item');
 
 // GET home page.
 router.get('/userLists/:userId', function(req, res) {
@@ -57,6 +58,14 @@ router.post('/createList/:userId', function(req, res) {
 })
   
 
-
+router.get('/lists/:listId/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const listId = req.params.listId;
+   try {
+    let getList = 'http://localhost:5000/lists/' + listIndexes;
+  } catch (error) {
+      res.render('userList/' + userId, {title: 'Your WishLists', message: error + '. Error oprening list. Please try again.'});
+    }
+})
 
 module.exports = router;

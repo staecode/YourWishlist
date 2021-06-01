@@ -1,0 +1,41 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css", integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z", crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='favicon' href='/favicon.ico' type='image/x-icon')
+  body
+    div(class='container-fluid w-50 mx-auto')
+      div(class='row d-none d-md-block' style='height:5vh;')
+      div(class='row')
+        div(class='col-lg-2')
+          block sidebar
+            ul(class='sidebar-nav')
+              li   
+                img(class='d-none d-lg-block' src='/images/favicon.ico' alt='logo' style='width:6vw;height:6vw;')
+                img(class='d-lg-none d-md-block d-sm-block  mx-auto' src='/images/favicon.ico' alt='logo' style='width:15vw;height:15vw;')
+              li
+                hr
+              li
+                a(class='sidebar-link' href='/userLists') My Wishlists
+              li
+                hr
+              li
+                a(class='sidebar-link' href='/createList') Create New List
+              li
+                hr
+              li
+                a(class='sidebar-link' href='/addToList') Add New Item 
+              li
+                hr
+              li 
+                a(class='sidebar-link' href='/logout') Log Out
+
+
+        div(class='col-lg-10 mainContent')
+          block content

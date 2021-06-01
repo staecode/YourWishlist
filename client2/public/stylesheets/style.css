@@ -1,0 +1,41 @@
+.sidebar-nav {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.sidebar-link, .homeListing, .formLabels {
+  color: rgb(68, 18, 92);
+}
+
+.heading {
+  color: rgb(68, 18, 92);
+  font-size: 30px;
+}
+
+.formLabels {
+  font-size: 20px;
+}
+
+.formBtn {
+  background-color:rgb(68, 18, 92);
+  color: rgb(232, 185, 245);
+  font-weight: bold;
+}
+
+.formBtn:hover {
+  color: rgb(255, 255, 255);
+  background-color:rgb(98, 23, 133);
+}
+
+.homeListing {
+  font-size: larger;
+}
+
+.mainContent {
+  border-left: 1px solid rgb(226, 204, 236);
+}

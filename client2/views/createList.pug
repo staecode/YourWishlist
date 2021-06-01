@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+    h1(class='heading')= title
+      form(method='POST' action='')
+        div.form-group
+        label(for='name' class='formLabels') List Name:
+        input#name.form-control(type='text', placeholder='Name your list here...' name='name' required='true'  )
+        div.form-group
+        label(for='description' class='formLabels') Description:
+        input#description.form-control(type='text', placeholder='Describe your list here...' name='description' required='true'  )
+        input(type="hidden" name="userId" value=userId)
+        button.btn(class='formBtn mt-4' type='submit') Submit
+        if message
+            p=message
+            

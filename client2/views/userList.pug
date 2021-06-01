@@ -1,0 +1,10 @@
+extends layout 
+
+block content
+  h1(class='heading') #{heading}
+  ul#results: each list in results
+    li 
+      a(class='homeListing' href= list.request.url) #{list.name + ':   $' + list.current_total_cost}
+      p #{list.description}
+      if message 
+        p=message
