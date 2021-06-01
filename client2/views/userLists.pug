@@ -1,0 +1,12 @@
+extends layout 
+
+block content
+  h1(class='heading') #{heading}
+  <br />
+  ul#results: each list in results
+    li(class='border light rounded my-2 p-3')
+      - var cost = list.current_total_cost.toFixed(2);
+      a(class='homeListing' href= list.request.url) #{list.name}:   <span class='current_cost'>$#{cost}</span>
+      p #{list.description}
+  if message 
+    p=message

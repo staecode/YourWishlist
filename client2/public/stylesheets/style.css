@@ -40,6 +40,7 @@ ul {
 
 .homeListing {
   font-size: larger;
+  font-weight: bold;
 }
 
 .curent_total_cost {
@@ -57,6 +58,7 @@ ul {
 
 .current_cost {
   color: rgb(6, 102, 18);
+  font-weight: bold;
 }
 
 .mainContent {
@@ -96,3 +98,4 @@ ul {
 .user_comm {
   color:rgb(68, 18, 92);
 }
+

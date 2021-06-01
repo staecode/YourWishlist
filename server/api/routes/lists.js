@@ -196,6 +196,7 @@ router.patch('/clearList/:listId', (req, res, next) => {
 router.post('/addItem', scraper, (req, res, next) => {
     if(!req.error) {
         const listId = req.body.listId;
+        console.log(listId);
         List.findById(listId)
             .then(list => {
             if(!list) {

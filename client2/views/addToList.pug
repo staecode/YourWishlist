@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+    h1(class='heading')= heading
+      form(method='POST' action='')
+        div.form-group
+        label(for='url' class='formLabels') Item URL:
+        input#url.form-control(type='text', placeholder='Enter E-commerce URL' name='url' required='true'  )
+        div.form-group
+          label(for='lists' class='formLabels') Select a List:
+          select#list.form-control(type='select' placeholder='Select from User Lists' name='list' required='true' )
+            - results.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+            - var count = 0;
+            for list in results 
+              if(count === 0)
+                option(value=list._id selected='selected') #{list.name}
+                - count++    
+              else 
+                option(value=list._id) #{list.name}
+        input(type="hidden" name="lists" value=results)
+        button.btn(class='formBtn mt-4' type='submit') Submit
+        if message
+            p=message
+            

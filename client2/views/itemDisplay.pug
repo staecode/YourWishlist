@@ -10,11 +10,13 @@ block content
                     img(src=item.item.img alt='item image' style='width:5vw;height:5vw;')
                 div(class='col-md-6  itemResultDesc')
                     a(class='itemListing' href=item.item.request.url) #{item.item.name + ':   '}
-                    p(class='itemPrice') #{'Cost: $' + item.item.price}
+                    - var price = item.item.price.toFixed(2);
+                    p(class='itemPrice') #{'Cost: $' + price}
 
         li  
           hr
-    h3(class='current_total_cost') Current Total Cost: <span class='current_cost'>$#{results.current_total_cost}</span>
+    - var cost = results.current_total_cost.toFixed(2);    
+    h3(class='current_total_cost') Current Total Cost: <span class='current_cost'>$#{cost}</span>
     if message 
             p=message
     
