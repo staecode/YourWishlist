@@ -4,8 +4,24 @@ const { body,validationResult } = require('express-validator');
 
 // GET home page.
 router.get('/', function(req, res) {
-  res.redirect('/userLists');
+  if(!req.headers.cookie) {
+      res.redirect('/login');
+  } else {
+    res.write('Profile coming soon');
+    res.end();
+  }
+})
+
+router.get('/login', function(req, res) {
+ // res.redirect('/userLists');
+  res.render('login', { error: false }); 
 });
+
+//GET register page
+router.get('/register', function (req, res) {
+  res.render('register', { error: false })
+}); 
+
 
 const axios = require('axios');
 const { listIndexes } = require('../api/models/item');

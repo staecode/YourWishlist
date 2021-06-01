@@ -1,0 +1,44 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css", integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z", crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='favicon' href='/favicon.ico' type='image/x-icon')
+
+
+    block content
+        img(class='d-none d-lg-block mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:6vw;height:6vw;')
+
+    div.text-center
+        
+        form(class= "form-signin" method='POST' action='/register')
+            - var h1Classes = ['h3', 'mb-3', 'font-weight-normal']
+            h1(class=h1Classes) Welcome to Your WishList
+
+            div.form-group 
+                label(for='name') Name: 
+                input#name.form-control(type='text', placeholder='first and last' name='name')
+
+            div.form-group 
+                label(for='email') Email: 
+                input#email.form-control(type='email', placeholder='name@email.com' name='email')
+
+            div.form-group     
+                label(for='pw') Password: 
+                input#pw.form-control(type='password' name='password')
+            div.form-group 
+                label(for='pw2') Confirm Password:
+                input#pw2.form-control(type='password' name='confirmPassword')
+            //-signIn button
+            - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block', 'formBtn', 'border-0', 'mb-2'];
+            button(class=buttonClass type="submit") Sign in
+
+            a(class='user_comm' href='/login') Already a member? Login here! 
+
+            - var pClasses=['mt-5', 'mb-3', 'text-muted'];
+            p(class=pClasses) &copy; 2021

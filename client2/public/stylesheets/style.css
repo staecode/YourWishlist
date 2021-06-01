@@ -4,6 +4,12 @@
   list-style: none;
 }
 
+/* 
+.top-icon {
+margin: auto;
+
+} */
+
 ul {
   list-style: none;
 }
@@ -22,14 +28,14 @@ ul {
 }
 
 .formBtn {
-  background-color:rgb(68, 18, 92);
+  background-color: rgb(68, 18, 92);
   color: rgb(232, 185, 245);
   font-weight: bold;
 }
 
 .formBtn:hover {
   color: rgb(255, 255, 255);
-  background-color:rgb(98, 23, 133);
+  background-color: rgb(98, 23, 133);
 }
 
 .homeListing {
@@ -55,4 +61,38 @@ ul {
 
 .mainContent {
   border-left: 1px solid rgb(226, 204, 236);
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.user_comm {
+  color:rgb(68, 18, 92);
 }
