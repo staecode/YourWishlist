@@ -22,7 +22,6 @@ router.get('/', (req, res, next) => {
 
 router.get('/:userId', (req, res, next) => {
     User.findById(req.params.userId) 
-    .exec()
     .then(user => {
         if(user) {
             res.status(200).json({user});
@@ -169,6 +168,36 @@ router.patch('/update/:userId', (req, res, next) => {
         res.status(500).json({
             error: err
         });
+    });
+})
+
+router.get('/userLists/:userId', (req, res, next) => {
+    const id = req.params.userId;
+    User.findById(id)
+    .populate('lists')
+    .exec()
+    .then(doc => {
+        res.status(200).json({
+            lists: doc.lists.map(list => {
+                return {
+                    list: {
+                        name: list.name,
+                        _id: list._id,
+                        description: list.description,
+                        current_total_cost: list.current_total_cost,
+                        request: {
+                            type: 'GET',
+                            description: 'link to list page',
+                            url: 'http://localhost:3000/lists/' + list
+                        }
+                    }
+                }
+            })
+        });
+    })
+    .catch(err => {
+        // couldn't get data, respond with error
+        res.status(500).json({error: err});
     });
 })
 
