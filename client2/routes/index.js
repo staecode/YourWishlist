@@ -5,10 +5,15 @@ const jwt = require('jsonwebtoken'); // token creation
 
 // GET home page.
 router.get('/', function(req, res) {
-  if(!req.headers.cookie) {
+  if(req.headers.cookie) {
+    const token = req.cookies['user'];
+    const decoded = jwt.verify(token, "" + process.env.JWT_KEY, function(err) {
+      res.clearCookie('user');
       res.redirect('/login');
-  } else {
+    })
     res.redirect('/userLists');
+  } else {
+    res.redirect('/login');
   }
 })
 
