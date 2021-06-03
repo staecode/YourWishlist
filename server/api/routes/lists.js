@@ -253,6 +253,7 @@ router.post('/addItem', scraper, (req, res, next) => {
             res.status(500).json({error: err});
         });
     } else {
+        console.log(err);
         res.status(500).json({error: req.error});
     }
 })

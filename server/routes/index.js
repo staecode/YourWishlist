@@ -175,7 +175,9 @@ router.post('/addToList', function(req, res) {
       });
       if(response) {
         res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, userId: decoded.userId, message: 'Item was added!'});
-      } 
+      } else {
+        res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, message: 'Failed to add. ' + response.data.error})
+      }
     } catch (error) {
       res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, message: 'Failed to add. ' + error})
     }

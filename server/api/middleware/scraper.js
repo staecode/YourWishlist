@@ -1,5 +1,6 @@
 const axios = require('axios');
 const url = require('url');
+const path = require('path');
 
 module.exports = (req, res, next) => {
 
@@ -11,7 +12,6 @@ module.exports = (req, res, next) => {
         (async () => {
             try {
                 const response = await axios.get(`${scrape_link}`);
-                console.log(response.data);
                 const item = {
                     "name": response.data.name,
                     "price": response.data.salePrice,
@@ -26,7 +26,34 @@ module.exports = (req, res, next) => {
                 next();
             }
         })();
-    } else {
+    }
+    // } else if(req.body.url.includes('etsy')) {
+    //     const listingId = req.body.url.split('/')[4];
+    //     const product_link = `https://openapi.etsy.com/v2/listings/${listingId}?api_key=${process.env.ETSY_KEY}`;
+    //     const image_link = `https://openapi.etsy.com/v2/listings/${listingId}/images?api_key=${process.env.ETSY_KEY}`;
+
+    //     (async () => {
+    //         try {
+    //             const response = await axios.get(`${product_link}`);
+    //             const item = {
+    //                 "name": response.data.title,
+    //                 "price": response.data.price,
+    //                 "description": response.data.description
+    //             };
+    //             const image = await axios.get(`${image_link}`);
+    //             item["imagehref"] = image.results[0].url_fullxfull;
+    //             req.item = item;
+    //             next();
+
+    //         }
+    //         catch (error) {
+    //             req.error = error;
+    //             next();
+    //         }
+    //     })();    
+        
+    // }
+     else {
         req.error = 'Sorry - at this time our app does not support this site\'s products';
         next();
     }
