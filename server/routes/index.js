@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken'); // token creation
+
 const { body,validationResult } = require('express-validator');
 
 // GET home page.
@@ -7,8 +9,7 @@ router.get('/', function(req, res) {
   if(!req.headers.cookie) {
       res.redirect('/login');
   } else {
-    res.write('Profile coming soon');
-    res.end();
+    res.redirect('/userLists');
   }
 })
 
@@ -24,11 +25,13 @@ router.post('/login', function (req, res, next) {
   if (loginResult) {
     res.render('layout', { username: username });
   }
+
   else {
     res.render('index', { error: true });
   }
 */
   (async () => {
+    console.log(req.body)
     try {
       let logincycle = 'http://localhost:5000/users/login';
       const response = await axios({
@@ -39,13 +42,16 @@ router.post('/login', function (req, res, next) {
           password: req.body.password
         }
       });
-      if (response) {
-        res.render('layout', { title: 'Welcome User', messaage: 'Logged in successfully' });
+      if(response.data) {
+        res.setHeader('Set-Cookie', `user=${response.data.token}`);
+        res.redirect('/userLists');
+      } else {
+        next();
       }
     } catch (error) {
-      res.render('login', {message: 'Failed to log in' + error})
+      res.render('login', {message: 'Failed to log in ' + error})
     }
-  })
+  })();
 });
 
 //GET register page
@@ -53,15 +59,21 @@ router.get('/register', function (req, res) {
   res.render('register', { error: false })
 }); 
 
+router.get('/logout', function (req, res) {
+  res.clearCookie('user');
+  res.redirect('/');
+}); 
 
 const axios = require('axios');
 
 // GET home page.
-router.get('/userLists/:userId', function(req, res) {
-    const userId = req.params.userId;
+router.get('/userLists', function(req, res) {
+    const token = req.cookies['user'];
+    const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
+    
     let lists = [];
 
-    let userlists = 'http://localhost:5000/users/userLists/' + userId;
+    let userlists = 'http://localhost:5000/users/userLists/' + decoded.userId;
 
     (async () => {
         try {
@@ -76,11 +88,15 @@ router.get('/userLists/:userId', function(req, res) {
     })();
 })
 
-router.get('/createList/:userId', function(req, res) {
-    res.render('createList', {title: 'Create New List', userId: req.params.userId});
+router.get('/createList', function(req, res) {
+    const token = req.cookies['user'];
+    const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
+    res.render('createList', {title: 'Create New List', userId: decoded.userId});
 })
 
-router.post('/createList/:userId', function(req, res) {
+router.post('/createList', function(req, res) {
+  const token = req.cookies['user'];
+  const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
 
   (async () => {
       try {
@@ -91,15 +107,15 @@ router.post('/createList/:userId', function(req, res) {
           data: {
             name: req.body.name,
             description: req.body.description,
-            userId: req.body.userId
+            userId: decoded.userId
           }
         });
         if(response) {
-          res.render('createList', {title: 'Your Wishlist', heading: 'Create New List', userId: req.body.userId, message: response.data.message});
+          res.render('createList', {title: 'Your Wishlist', heading: 'Create New List',  message: response.data.message});
         } 
       } catch (error) {
 
-        res.render('createList', {title: 'Your Wishlist', heading: 'Create New List', userId: req.body.userId, message: error + '. Error creating list. Please try again.'});
+        res.render('createList', {title: 'Your Wishlist', heading: 'Create New List', message: error + '. Error creating list. Please try again.'});
       }
     })();
 })
@@ -122,11 +138,12 @@ router.get('/lists/:listId', (req, res) => {
 
 })
 
-router.get('/addToList/:userId', function(req,res) {
-  const userId = req.params.userId;
+router.get('/addToList', function(req,res) {
+    const token = req.cookies['user'];
+    const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
     let lists = [];
 
-    let userlists = 'http://localhost:5000/users/userLists/' + userId;
+    let userlists = 'http://localhost:5000/users/userLists/' + decoded.userId;
 
     (async () => {
         try {
@@ -141,8 +158,9 @@ router.get('/addToList/:userId', function(req,res) {
     })();
 })
 
-router.post('/addToList/:userId', function(req, res) {
-  const userId = req.params.userId;
+router.post('/addToList', function(req, res) {
+  const token = req.cookies['user'];
+  const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
   const lists = JSON.parse(req.body.lists);
   (async () => {
     try {
@@ -156,7 +174,7 @@ router.post('/addToList/:userId', function(req, res) {
         }
       });
       if(response) {
-        res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, userId: req.body.userId, message: 'Item was added!'});
+        res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, userId: decoded.userId, message: 'Item was added!'});
       } 
     } catch (error) {
       res.render('addToList', {title: 'Your Wishlist', heading: 'Add New Item', results: lists, message: 'Failed to add. ' + error})
