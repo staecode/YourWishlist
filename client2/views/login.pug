@@ -12,11 +12,13 @@ html(lang='en')
 
 
     block content
-        img(class='d-none d-lg-block mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:6vw;height:6vw;')
-
+        img(class='d-none d-lg-block d-md-none d-sm-none mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:7vw;height:7vw;')
+        img(class='d-none d-lg-none d-md-block d-sm-none mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:14vw;height:14vw;')
+        img(class='d-none d-lg-none d-md-none d-sm-block mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:20vw;height:20vw;')
+        img(class='d-block d-sm-none mt-4 mx-auto' src='/images/favicon.ico' alt='logo' style='width:20vw;height:20vw;')
     div.text-center
         
-        form(class="form-signin" method="POST" action="/users/login")
+        form(class="form-signin" method="POST" action="")
             #error
                 if error
                     p.text-danger Error!!!
@@ -29,7 +31,7 @@ html(lang='en')
 
             //-input email
             label( for="inputEmail" class="sr-only") Email address
-            input(type="email" name="username" id="inputEmail" class="form-control" placeholder="Email address" required autofocus)
+            input(type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus)
 
             //-input password
             label(for="inputPassword" class="sr-only") Password
@@ -50,3 +52,5 @@ html(lang='en')
             
             - var pClasses=['mt-5', 'mb-3', 'text-muted'];
             p(class=pClasses) &copy; 2021
+        if message 
+            p(class='d-block mx-auto')=message
