@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken'); // token creation
 
-const { body,validationResult } = require('express-validator');
 
 // GET home page.
 router.get('/', function(req, res) {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "api": "nodemon index.js",
-    "server": "nodemon bin/www.js",
+    "server": "nodemon ../client2/bin/www.js",
     "start": "concurrently \"npm:api\" \"npm:server\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
