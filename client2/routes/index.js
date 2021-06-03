@@ -57,6 +57,31 @@ router.post('/login', function (req, res, next) {
 router.get('/register', function (req, res) {
   res.render('register', { error: false })
 }); 
+router.post('/register', function (req, res, next) {
+    (async () => {
+      console.log(req.body)
+      try {
+        let registercycle = 'http://localhost:5000/users/register';
+        const response = await axios({
+          method: 'POST',
+          url: `${registercycle}`,
+          data: {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+          }
+        });
+        if(response.data) {
+          res.setHeader('Set-Cookie', `user=${response.data.token}`);
+          res.redirect('/login');
+        } else {
+          next();
+        }
+      } catch (error) {
+        res.render('register', {message: 'Failed to register this account' + error})
+      }
+    })();
+  });
 
 router.get('/logout', function (req, res) {
   res.clearCookie('user');
