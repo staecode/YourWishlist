@@ -37,6 +37,8 @@ export default LoadingScreen = () => {
                 YourWishlistsApp
             </Text>
 
+            {/* Animation loading Screen*/}
+
             <LottieView
                 source={require("../../assets/39600-shopping-bag.json")}
                 autoPlay

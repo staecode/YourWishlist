@@ -41,7 +41,10 @@ export default SignInScreen = ({ navigation }) => {
         <Container>
             <Main>
                 <Text title semi center>
-                    Welcome back.
+                    Welcome to
+                </Text>
+                <Text title semi center>
+                    YourWishlist
                 </Text>
             </Main>
 

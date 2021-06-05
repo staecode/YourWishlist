@@ -9,6 +9,7 @@ html(lang='en')
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='favicon' href='/favicon.ico' type='image/x-icon')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   body
     div(class='container-fluid w-50 mx-auto')
       div(class='row d-none d-md-block' style='height:5vh;')
@@ -22,19 +23,22 @@ html(lang='en')
               li
                 hr
               li
-                a(class='sidebar-link' href='/userLists') My Wishlists
-              li
-                hr
-              li
-                a(class='sidebar-link' href='/createList') Create New List
-              li
-                hr
-              li
-                a(class='sidebar-link' href='/addToList') Add New Item 
+                a(class='sidebar-link',class='fa fa-heart' href='/userLists') My Wishlists
               li
                 hr
               li 
-                a(class='sidebar-link' href='/logout') Log Out
+                a(class='sidebar-link', class='fa fa-heart' href='/userInfo') Update Info 
+              hr
+              li
+                a(class='sidebar-link', class='fa fa-heart' href='/createList') Create New List
+              li
+                hr
+              li
+                a(class='sidebar-link', class='fa fa-heart' href='/addToList') Add New Item 
+              li
+                hr
+              li 
+                a(class='sidebar-link', class='fa fa-heart' href='/logout') Log Out
 
 
         div(class='col-lg-10 mainContent')
