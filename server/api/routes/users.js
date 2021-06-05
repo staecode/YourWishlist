@@ -129,7 +129,6 @@ router.post('/register', (req, res, next) => {
                 // save object in database
                     user.save()
                     .then(result => {
-                        console.log(result);
                             // 201, successful, resource created
                         res.status(201).json({ 
                         message: 'User ' + result.name + ' was created!',

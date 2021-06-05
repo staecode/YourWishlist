@@ -77,7 +77,7 @@ router.post('/register', function (req, res, next) {
           }
         });
         if(response.data) {
-          res.setHeader('Set-Cookie', `user=${response.data.token}`);
+          // res.setHeader('Set-Cookie', `user=${response.data.token}`);
           res.redirect('/login');
         } else {
           next();
