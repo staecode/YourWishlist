@@ -37,7 +37,7 @@ export default ProfileScreen = () => {
             <StatsContainer>
                 <StatContainer>
                     <Text large light>
-                        21
+                        50
                     </Text>
                     <Text small bold color="#1f1424">
                         Posts
@@ -45,7 +45,7 @@ export default ProfileScreen = () => {
                 </StatContainer>
                 <StatContainer>
                     <Text large light>
-                        981
+                        900
                     </Text>
                     <Text small bold color="#1f1424">
                         Followers
@@ -53,7 +53,7 @@ export default ProfileScreen = () => {
                 </StatContainer>
                 <StatContainer>
                     <Text large light>
-                        63
+                        70
                     </Text>
                     <Text small bold color="#1f1424">
                         Following

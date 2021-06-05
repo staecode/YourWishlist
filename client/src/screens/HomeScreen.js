@@ -12,7 +12,7 @@ export default HomeScreen = () => {
                 <PostProfilePhoto source={{ uri: item.user.profilePhotoUrl }} />
                 <PostInfoContainer>
                     <Text medium>{item.user.username}</Text>
-                    <Text tiny color="#c1c3cc" margin="4px 0 0 0">
+                    <Text tiny color="#00131a" margin="4px 0 0 0">
                         {item.postedAt}
                     </Text>
                 </PostInfoContainer>
@@ -20,18 +20,21 @@ export default HomeScreen = () => {
                     <Entypo name="dots-three-horizontal" size={16} color="#73788b" />
                 </Options>
             </PostHeaderContainer>
+
+            {/* User Post */}
+
             <Post>
                 <Text>{item.post}</Text>
                 <PostPhoto source={{ uri: item.photoUrl }} />
                 <PostDetails>
                     <PostLikes>
-                        <Ionicons name="ios-heart-empty" size={24} color="#73788b" />
+                        <Ionicons name="ios-heart-empty" size={24} color="#ccf2ff" />
                         <Text tiny margin="0 0 0 8px">
                             {item.likes}
                         </Text>
                     </PostLikes>
                     <PostComments>
-                        <Ionicons name="ios-chatboxes" size={24} color="#73788b" />
+                        <Ionicons name="ios-chatboxes" size={24} color="#ccf2ff" />
                         <Text tiny margin="0 0 0 8px">
                             {item.comments}
                         </Text>
@@ -45,7 +48,7 @@ export default HomeScreen = () => {
         <Container>
             <FeedContainer>
                 <Text large light center>
-                    Feed
+                    Feed Screen
                 </Text>
 
                 <Feed data={tempData} renderItem={renderPost} keyExtractor={(item) => item.id.toString()} />
@@ -57,8 +60,8 @@ export default HomeScreen = () => {
 
 const Container = styled.View`
     flex: 1;
-    background-color: #ebecf3;
-    padding-top: 64px;
+    background-color:#ffe6ff;
+    padding-top: 57px;
 `;
 
 const FeedContainer = styled.View``;
@@ -66,7 +69,7 @@ const FeedContainer = styled.View``;
 const Feed = styled.FlatList``;
 
 const PostContainer = styled.View`
-    margin: 16px 16px 0 16px;
+    margin: 13px 13px 0 13px;
     background-color: #ffffff;
     border-radius: 6px;
     padding: 8px;
@@ -79,8 +82,8 @@ const PostHeaderContainer = styled.View`
 `;
 
 const PostProfilePhoto = styled.Image`
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 24px;
 `;
 

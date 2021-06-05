@@ -213,4 +213,13 @@ router.post('/addToList', function(req, res) {
   })();
 })
 
+  // router.post('/userInfo', function(req, res) {
+  //   const bodyParser = require('body-parser');
+  //   server.use(bodyParser.urlencoded({ extended: false }));
+  //   server.use(bodyParser.json());
+  // })
+
+
+
+
 module.exports = router;

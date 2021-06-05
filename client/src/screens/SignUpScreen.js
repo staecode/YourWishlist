@@ -44,6 +44,8 @@ export default SignUpScreen = ({ navigation }) => {
         }
     };
 
+    // Ask for permission to access into camera roll
+
     const addProfilePhoto = async () => {
         const status = await getPermission();
 
@@ -76,7 +78,10 @@ export default SignUpScreen = ({ navigation }) => {
         <Container>
             <Main>
                 <Text title semi center>
-                    Sign up to get started.
+                    Sign up
+                </Text>
+                <Text title semi center>
+                    New Wishlist User
                 </Text>
             </Main>
 
@@ -89,6 +94,9 @@ export default SignUpScreen = ({ navigation }) => {
                     </DefaultProfilePhoto>
                 )}
             </ProfilePhotoContainer>
+
+        
+        {/* Firebase */}
 
             <Auth>
                 <AuthContainer>
@@ -134,6 +142,7 @@ export default SignUpScreen = ({ navigation }) => {
                     <Text bold center color="#ffffff">
                         Sign Up
                     </Text>
+
                 )}
             </SignUpContainer>
 
@@ -169,7 +178,7 @@ const ProfilePhotoContainer = styled.TouchableOpacity`
     height: 80px;
     border-radius: 40px;
     align-self: center;
-    margin-top: 16px;
+    margin-top: 25px;
     overflow: hidden;
 `;
 
