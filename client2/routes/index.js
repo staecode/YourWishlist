@@ -213,4 +213,23 @@ router.post('/addToList', function(req, res) {
   })();
 })
 
+//this is a get method
+// router.get('/userInfo', function(req, res) {
+//   const token = req.cookies['user'];
+//   const decoded = jwt.verify(token, "" + process.env.JWT_KEY);
+//   // add call to backend here to get user's saved info, like the call on 195 in the above function above
+
+//   //this function needs to be inserted into the call you make to the backend, like lines 207 - 214
+//   res.render('userInfo', {title: 'User Info', userId: decoded.userId, // pass an object here you grab from the backend with user info});
+// })
+
+
+  // router.post('/userInfo', function(req, res) {
+  //   const bodyParser = require('body-parser'); // this is backend code that you don't need here, it's already taken care of
+  //   server.use(bodyParser.urlencoded({ extended: false })); // this is backend code that you don't need here, it's already taken care of
+  //   server.use(bodyParser.json()); // this is backend code that you don't need here, it's already taken care of
+        //look at line 194 down above to see how we get the info and pass it on
+  // })
+
+
 module.exports = router;
