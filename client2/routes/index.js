@@ -213,7 +213,6 @@ router.post('/addToList', function(req, res) {
   })();
 })
 
-<<<<<<< HEAD
 //this is a get method
 // router.get('/userInfo', function(req, res) {
 //   const token = req.cookies['user'];
@@ -233,15 +232,4 @@ router.post('/addToList', function(req, res) {
   // })
 
 
-=======
-  // router.post('/userInfo', function(req, res) {
-  //   const bodyParser = require('body-parser');
-  //   server.use(bodyParser.urlencoded({ extended: false }));
-  //   server.use(bodyParser.json());
-  // })
-
-
-
-
->>>>>>> 1c60eebf4631d0779709369a7d7d988bb838a911
 module.exports = router;
